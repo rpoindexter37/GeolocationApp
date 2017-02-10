@@ -55,13 +55,11 @@ angular.module('starter.controllers', ['ngCordova'])
     $cordovaGeolocation
       .getCurrentPosition(posOptions)
       .then(function (position) {
-        var lat  = position.coords.latitude
-        var long = position.coords.longitude
-        alert(lat)
-        alert(long)
-      }, function(err) {
-        alert(err)
+        $scope.lat  = position.coords.latitude
+        $scope.long = position.coords.longitude
+            }, function(err) {
       });
+
 
 
     var watchOptions = {
@@ -73,13 +71,11 @@ angular.module('starter.controllers', ['ngCordova'])
     watch.then(
       null,
       function(err) {
-        alert("watch error" + err)
       },
       function(position) {
-        var lat  = position.coords.latitude
-        var long = position.coords.longitude
-        alert("watch lat = " + lat)
-        alert("watch long = " + long)
+        $scope.lat  = position.coords.latitude
+        $scope.long = position.coords.longitude
+        // $scope.$apply()
     });
 
 })
