@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -41,44 +41,84 @@ angular.module('starter.controllers', ['ngCordova'])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope, $cordovaGeolocation) {
+.controller('PlaylistsCtrl', function($scope, $cordovaGeolocation, $http) {
+
   $scope.playlists = [
     { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
+
   ];
 
-  var posOptions = {timeout: 10000, enableHighAccuracy: false};
-    $cordovaGeolocation
-      .getCurrentPosition(posOptions)
-      .then(function (position) {
-        $scope.lat  = position.coords.latitude
-        $scope.long = position.coords.longitude
-            }, function(err) {
-      });
 
 
 
-    var watchOptions = {
-      timeout : 3000,
-      enableHighAccuracy: false // may cause errors if true
-    };
+  // var posOptions = {timeout: 10000, enableHighAccuracy: false};
+  //   $cordovaGeolocation
+  //     .getCurrentPosition(posOptions)
+  //     .then(function (position) {
+  //       $scope.lat  = position.coords.latitude
+  //       $scope.long = position.coords.longitude
+  //           }, function(err) {
+  //     });
+  //
+  //
+  //
+  //   var watchOptions = {
+  //     timeout : 3000,
+  //     enableHighAccuracy: false // may cause errors if true
+  //   };
+  //
+  //   var watch = $cordovaGeolocation.watchPosition(watchOptions);
+  //   watch.then(
+  //     null,
+  //     function(err) {
+  //     },
+  //     function(position) {
+  //       $scope.lat  = position.coords.latitude
+  //       $scope.long = position.coords.longitude
+  //       // $scope.$apply()
+  //   });
 
-    var watch = $cordovaGeolocation.watchPosition(watchOptions);
-    watch.then(
-      null,
-      function(err) {
-      },
-      function(position) {
-        $scope.lat  = position.coords.latitude
-        $scope.long = position.coords.longitude
-        // $scope.$apply()
-    });
+ })
 
-})
+.controller('PlaylistCtrl', function($scope, $cordovaGeolocation, $stateParams, $http) {
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+  $scope.startTrip = function(){
+
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+      $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+          $scope.lat  = position.coords.latitude
+          $scope.long = position.coords.longitude
+              }, function(err) {
+        });
+
+      var watchOptions = {
+        timeout : 3000,
+        enableHighAccuracy: false // may cause errors if true
+      };
+
+      var watch = $cordovaGeolocation.watchPosition(watchOptions);
+      watch.then(
+        null,
+        function(err) {
+        },
+        function(position) {
+          $scope.lat  = position.coords.latitude
+          $scope.long = position.coords.longitude
+          // $scope.$apply()
+      })
+
+    console.log("start trip call!")
+    $http({
+        method : "POST",
+        url : "http://localhost:3000/trips",
+        data: { topMPH: 69 }
+    }).then(function mySuccess(response) {
+        console.log("success")
+    }, function myError(response) {
+        console.log("error");
+    })
+  }
+
 });
