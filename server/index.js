@@ -77,13 +77,25 @@ app.all('*', function(req, res, next) {
   app.get('/parent/:id', (req, res) => {
     Parent.findById(req.params.id, function(err, parent){
       console.log('at least im trying')
-      res.sendFile('parent.html', {root: __dirname})
+      res.sendFile(process.env.PWD + '/www/templates/user/parent.html')
+      res.json(parent)
     })
   })
 
   app.post('/child', function(req, res){
+    parent.findById(req.params.id, (err, parent) => {
+      parent.child.push(req.body)
+      parent.save(() => res.redirect('/child/' + child._id))
+    })
     var newChild = new Child(req.body)
     newChild.parent = req.params.id
+
+
+    var newChild = new Child(req.body)
+    newChild.parent = req.params.id
+
+
+
 
     // Child.create(req.body, function(err, child){
     //   res.send({message: 'child has been created', child: child})

@@ -41,11 +41,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.parent', {
+      url: '/parent',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/parent.html'
         }
       }
     })
