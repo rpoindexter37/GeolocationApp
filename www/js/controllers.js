@@ -122,3 +122,23 @@ angular.module('starter.controllers', ['ngCordova'])
   }
 
 });
+
+
+.controller('ChildCtrl', function($scope, $cordovaGeolocation, $stateParams, $http) {
+
+  $scope.createChild = function(){
+    console.log('we be creatin a child')
+    $http({
+        method : "POST",
+        url : "http://localhost:3000/child",
+        data: {}
+        //we are going to return child.parent = parent.id
+    }).then(function mySuccess(response) {
+        console.log("success")
+        //parent.push(child)
+    }, function myError(response) {
+        console.log("error");
+    })
+  }
+
+});
