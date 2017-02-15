@@ -36,6 +36,7 @@ app.all('*', function(req, res, next) {
 
   var parentSchema = new mongoose.Schema({
     name: {type: String},
+    password: {type: String},
     children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Child'}]
   })
 

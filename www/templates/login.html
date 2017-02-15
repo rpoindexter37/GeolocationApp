@@ -6,15 +6,15 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="doLogin()">
+    <form ng-submit="createParent()">
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
+          <span class="input-label">Name</span>
+          <input type="text" ng-model="newParent.name">
         </label>
         <label class="item item-input">
           <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
+          <input type="password" ng-model="newParent.password">
         </label>
         <label class="item">
           <button class="button button-block button-positive" type="submit">Log in</button>

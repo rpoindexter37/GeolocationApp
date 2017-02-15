@@ -9,6 +9,24 @@ angular.module('starter.controllers', ['ngCordova'])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
+  $scope.newParent = {}
+  $scope.createParent = function(){
+    console.log('we be creatin a parent')
+    console.log($scope);
+    $scope.newParent = {}
+    $http({
+        method: "POST",
+        url: "http://localhost:3000/parent/",
+        data: $scope.newParent
+        //we are going to return child.parent = parent.id
+    }).then(function mySuccess(response) {
+        console.log(response)
+        $scope.newParent = {}
+    }, function myError(response) {
+        console.log("error");
+    })
+  }
+
   // Form data for the login modal
   $scope.loginData = {};
 
