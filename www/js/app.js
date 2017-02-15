@@ -25,60 +25,60 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app.child', {
+    url: '/child',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/child.html'
       }
     }
   })
 
-  .state('app.loginpage', {
-    url: '/loginpage',
+  .state('app.login', {
+    url: '/login',
     views: {
       'menuContent': {
-        templateUrl: 'templates/loginpage.html',
-        controller: 'LoginCtrl'
+        templateUrl: 'templates/login.html',
+        // controller: 'LoginCtrl'
       }
     }
   })
 
-  .state('app.parent', {
-      url: '/parent/{id}',
+  .state('app.create-parent', {
+      url: '/create-parent',
       views: {
         'menuContent': {
-          templateUrl: 'templates/parent.html',
+          templateUrl: 'templates/create-parent.html',
           controller: 'ParentCtrl'
         }
       }
     })
-    .state('app.playlists', {
-      url: '/playlists',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
+    // .state('app.playlists', {
+    //   url: '/playlists',
+    //   views: {
+    //     'menuContent': {
+    //       templateUrl: 'templates/playlists.html',
+    //       controller: 'PlaylistsCtrl'
+    //     }
+    //   }
+    // })
 
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
-      }
-    }
-  });
+  // .state('app.single', {
+  //   url: '/playlists/:playlistId',
+  //   views: {
+  //     'menuContent': {
+  //       templateUrl: 'templates/playlist.html',
+  //       controller: 'PlaylistCtrl'
+  //     }
+  //   }
+  // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/login');
 });
