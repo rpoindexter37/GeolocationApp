@@ -1,12 +1,21 @@
 <ion-view view-title="Parent">
   <ion-content>
-    <h1>Parent</h1>
+    <h1>{{ currentParent.name }}</h1>
 
-    <form class="" action="index.html" method="post">
-      <input type="text" name="child" placeholder="name">
-      <button ng-click="createChild()" class="button button-dark" name="button">Submit</button>
+    <ul>here are his children
+      <li ng-repeat="c in currentParent.children">{{ c.name }}</li>
+    </ul>
+
+
+<div class="submit" ng-controller="ChildCtrl">
+    <form ng-submit="createChild()">
+      <label for="input"> Add a child</label>
+      <input type="text" name="name" placeholder="name" ng-model="newChild.name">
+      <input type="submit" value="Submit" />
+
+      <!-- <button ng-click="createChild()" class="button button-dark" name="button">Submit</button> -->
     </form>
-
+</div>
 
   </ion-content>
 </ion-view>

@@ -45,7 +45,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
       url: '/parent/{id}',
       views: {
         'menuContent': {
-          templateUrl: 'templates/parent.html'
+          templateUrl: 'templates/parent.html',
+          controller: 'ParentCtrl'
         }
       }
     })

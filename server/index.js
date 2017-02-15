@@ -34,15 +34,29 @@ app.all('*', function(req, res, next) {
     topMPH: Number,
   })
 
-  var Parent = mongoose.model('Parent',{
+  var parentSchema = new mongoose.Schema({
     name: {type: String},
     children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Child'}]
   })
 
-  var Child = mongoose.model('Child', {
-    name: {type: String},
-    parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent'},
+  parentSchema.pre('findOne', function(next) {
+    this.populate('children')
+    next()
   })
+
+  var Parent = mongoose.model('Parent', parentSchema)
+
+  var childSchema = new mongoose.Schema({
+    name: {type: String},
+    parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent'}
+  })
+
+  childSchema.pre('findOne', function(next) {
+    this.populate('parent')
+    next()
+  })
+
+  var Child = mongoose.model('Child', childSchema)
 
 
 //this sends the html file to the server
@@ -76,30 +90,17 @@ app.all('*', function(req, res, next) {
 
   app.get('/parent/:id', (req, res) => {
     Parent.findById(req.params.id, function(err, parent){
-      console.log('at least im trying')
+      console.log('im trying to get one parent')
       res.sendFile(process.env.PWD + '/www/templates/user/parent.html')
-      res.json(parent)
+        res.json(parent)
     })
   })
 
-  app.post('/child', function(req, res){
-    parent.findById(req.params.id, (err, parent) => {
-      parent.child.push(req.body)
-      parent.save(() => res.redirect('/child/' + child._id))
+
+  app.get('/child', (req, res) => {
+    Child.find({}, function (err, child) {
+      res.json(child)
     })
-    var newChild = new Child(req.body)
-    newChild.parent = req.params.id
-
-
-    var newChild = new Child(req.body)
-    newChild.parent = req.params.id
-
-
-
-
-    // Child.create(req.body, function(err, child){
-    //   res.send({message: 'child has been created', child: child})
-    // })
   })
 
   app.get('/child/:id', (req, res) => {
@@ -108,22 +109,19 @@ app.all('*', function(req, res, next) {
     })
   })
 
-//this sends the html file to the server
-  // app.get('/', (req, res) => {
-  //   res.sendFile(process.env.PWD + '/www/index.html')
-  // })
-  //
-  // app.get('/trips', (req, res) => {
-  //   Trip.find({}, function(err, trips) {
-  //     res.json(trips)
-  //   })
-  // })
-  //
-  // app.post('/trips', function(req, res) {
-  //   Trip.create(req.body, function(err, trip) {
-  //     res.send({message: "you done send me sumptin: ", trip: trip})
-  //   })
-  // })
+
+  app.post('/parent/:parentId', function(req, res){
+    var pId = req.params.parentId
+    Parent.findById(pId, function (err, thisParent) {
+    var newChild = new Child(req.body)
+    newChild.parent = req.params.id
+    newChild.save((err, child) => {
+      thisParent.children.push(child)
+      thisParent.save()
+      res.redirect('/child/' + child._id)
+      })
+    })
+    })
 
 app.listen(PORT, (err) => {
   console.log(err || "server running on port " + PORT)

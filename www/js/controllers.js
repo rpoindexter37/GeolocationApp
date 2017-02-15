@@ -121,7 +121,7 @@ angular.module('starter.controllers', ['ngCordova'])
     })
   }
 
-});
+})
 
 
 .controller('ChildCtrl', function($scope, $cordovaGeolocation, $stateParams, $http) {
@@ -129,16 +129,31 @@ angular.module('starter.controllers', ['ngCordova'])
   $scope.createChild = function(){
     console.log('we be creatin a child')
     $http({
-        method : "POST",
-        url : "http://localhost:3000/child",
-        data: {}
+        method: "POST",
+        url: ("http://localhost:3000/parent/" + $stateParams.id),
+        data: ($scope.newChild)
         //we are going to return child.parent = parent.id
     }).then(function mySuccess(response) {
-        console.log("success")
-        //parent.push(child)
+        console.log(response)
     }, function myError(response) {
         console.log("error");
     })
   }
 
-});
+})
+
+.controller('ParentCtrl', function($scope, $http, $stateParams) {
+
+
+  $http.get("http://localhost:3000/parent/" + $stateParams.id)
+    .then(function(response) {
+      console.log("response data" + response.data);
+        $scope.currentParent = response.data
+    })
+
+    // $http.get("http://localhost:3000/child/" + $stateParams.id)
+    //   .then(function(response) {
+    //     console.log("response data" + response.data);
+    //       $scope.currentParent = response.data
+    //   })
+})
