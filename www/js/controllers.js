@@ -26,37 +26,6 @@ angular.module('starter.controllers', ['ngCordova'])
         console.log("error");
     })
   }
-
-  // Form data for the login modal
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
 })
 
 .controller('PlaylistsCtrl', function($scope, $cordovaGeolocation, $http) {
@@ -174,32 +143,4 @@ angular.module('starter.controllers', ['ngCordova'])
     //     console.log("response data" + response.data);
     //       $scope.currentParent = response.data
     //   })
-})
-
-.controller('LoginCtrl', function($scope, $http, $statePatams) {
-
-  $scope.login = function () {
-
-
-    // call login from service
-    UserService.login($scope.loginForm.username, $scope.loginForm.password)
-
-      // handle success
-      .then(function () {
-        console.log("Successful login...")
-        $state.go('profile')
-        vm.loginForm = {}
-      })
-      // // handle error
-      // .catch(function () {
-      //   console.log("Whoops...")
-      //   vm.error = true
-      //   vm.errorMessage = "Invalid username and/or password"
-      //   vm.disabled = false
-      //   vm.loginForm = {}
-      // })
-  }
-}
-
-
 })
