@@ -175,3 +175,31 @@ angular.module('starter.controllers', ['ngCordova'])
     //       $scope.currentParent = response.data
     //   })
 })
+
+.controller('LoginCtrl', function($scope, $http, $statePatams) {
+
+  $scope.login = function () {
+
+
+    // call login from service
+    UserService.login($scope.loginForm.username, $scope.loginForm.password)
+
+      // handle success
+      .then(function () {
+        console.log("Successful login...")
+        $state.go('profile')
+        vm.loginForm = {}
+      })
+      // // handle error
+      // .catch(function () {
+      //   console.log("Whoops...")
+      //   vm.error = true
+      //   vm.errorMessage = "Invalid username and/or password"
+      //   vm.disabled = false
+      //   vm.loginForm = {}
+      // })
+  }
+}
+
+
+})

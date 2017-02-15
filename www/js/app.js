@@ -41,6 +41,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
     }
   })
 
+  .state('app.loginpage', {
+    url: '/loginpage',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/loginpage.html',
+        controller: 'LoginCtrl'
+      }
+    }
+  })
+
   .state('app.parent', {
       url: '/parent/{id}',
       views: {

@@ -24,9 +24,9 @@ app.all('*', function(req, res, next) {
     next();
 });
 
+
+
 //model
-
-
   var Trip = mongoose.model('Trip', {
     start: Date,
     locationInfo: {},
