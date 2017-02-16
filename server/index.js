@@ -3,18 +3,35 @@ const
   app = express(),
   mongoose = require('mongoose'),
   morgan = require('morgan'),
+  flash = require('connect-flash'),
+  cookieParser = require('cookie-parser'),
+  session = require('express-session'),
+  MongoDBStore = require('connect-mongodb-session')(session),
+  passport = require('passport'),
   bodyParser = require('body-parser'),
-  PORT = 3000,
-  mongoUrl = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
+  Parent = require('./models/Parent.js')
+  Child = require('./models/Child.js')
+  port = process.env.PORT || 3000,
+  mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
 
-  mongoose.connect(mongoUrl, (err) => {
+//mongoose connection
+  mongoose.connect(mongoConnectionString, (err) => {
   console.log(err || "Connected to MongoDB.")
 })
 
 
+const store = new MongoDBStore({
+  uri: mongoConnectionString,
+  collection: 'sessions'
+})
+
+//middleware
   app.use(morgan('dev'))
+  app.use(cookieParser())
+  app.use(bodyParser.urlencoded({extended: true}))
   app.use(bodyParser.json())
   app.use(express.static(process.env.PWD + '/www'))
+  app.use(flash())
 
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
@@ -27,37 +44,43 @@ app.all('*', function(req, res, next) {
 
 
 //model
-  var Trip = mongoose.model('Trip', {
-    start: Date,
-    locationInfo: {},
-    end: Date,
-    topMPH: Number,
-  })
-
-  var parentSchema = new mongoose.Schema({
-    name: {type: String},
-    password: {type: String},
-    children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Child'}]
-  })
-
-  parentSchema.pre('findOne', function(next) {
-    this.populate('children')
-    next()
-  })
-
-  var Parent = mongoose.model('Parent', parentSchema)
-
-  var childSchema = new mongoose.Schema({
-    name: {type: String},
-    parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent'}
-  })
-
-  childSchema.pre('findOne', function(next) {
-    this.populate('parent')
-    next()
-  })
-
-  var Child = mongoose.model('Child', childSchema)
+  // var Trip = mongoose.model('Trip', {
+  //   start: Date,
+  //   locationInfo: {},
+  //   end: Date,
+  //   topMPH: Number,
+  // })
+  //
+  // var parentSchema = new mongoose.Schema({
+  //   name: {type: String},
+  //   password: {type: String},
+  //   children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Child'}]
+  // })
+  //
+  // parentSchema.pre('findOne', function(next) {
+  //   this.populate('children')
+  //   next()
+  // })
+  //
+  // var Parent = mongoose.model('Parent', parentSchema)
+  //
+  // var childSchema = new mongoose.Schema({
+  //   name: {type: String},
+  //   username: {type: String},
+  //   password: {type: String},
+  //   averageRating: {type: Number},
+  //   averageTopSpeed: {type: Number},
+  //   totalTripTime: {type: Number},
+  //   parentView: {type: Boolean, default: false},
+  //   parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent'}
+  // })
+  //
+  // childSchema.pre('findOne', function(next) {
+  //   this.populate('parent')
+  //   next()
+  // })
+  //
+  // var Child = mongoose.model('Child', childSchema)
 
 
 //this sends the html file to the server
@@ -105,7 +128,7 @@ app.all('*', function(req, res, next) {
   })
 
   app.get('/child/:id', (req, res) => {
-    Child.find({}, function(err, child) {
+    Child.findById(req.params.id, function(err, child) {
       res.json(child)
     })
   })
@@ -124,6 +147,22 @@ app.all('*', function(req, res, next) {
     })
     })
 
-app.listen(PORT, (err) => {
-  console.log(err || "server running on port " + PORT)
+
+    app.post('/login', (req, res, next) => {
+      passport.authenticate('local', (err, user, info) => {
+        if (err) return next(err)
+        if (!user) return res.status(401).json({ err: info })
+        req.logIn(user, (err) => {
+          if (err) return res.status(500).json({ err: 'Could not log in user' })
+          res.status(200).json({
+            status: 'Login successful!',
+            user: user
+          })
+        })
+      })(req, res, next)
+    })
+
+
+app.listen(port, (err) => {
+  console.log(err || "server running on port " + port)
 })

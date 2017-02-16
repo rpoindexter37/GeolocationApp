@@ -33,10 +33,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
   })
 
   .state('app.child', {
-    url: '/child',
+    url: '/child/:id',
     views: {
       'menuContent': {
-        templateUrl: 'templates/child.html'
+        templateUrl: 'templates/child.html',
+        controller: 'ChildCtrl'
       }
     }
   })
@@ -56,6 +57,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
       views: {
         'menuContent': {
           templateUrl: 'templates/create-parent.html',
+          controller: 'AppCtrl'
+        }
+      }
+    })
+
+  .state('app.parent', {
+      url: '/parent/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/parent.html',
           controller: 'ParentCtrl'
         }
       }

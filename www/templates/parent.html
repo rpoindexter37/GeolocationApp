@@ -3,7 +3,7 @@
     <h1>{{ currentParent.name }}</h1>
 
     <ul>here are his children
-      <li ng-repeat="c in currentParent.children">{{ c.name }}</li>
+      <li ui-sref="app.child({id: c._id})" ng-repeat="c in currentParent.children">{{ c.name }} and thier id {{ c._id }} and here is their link {{ }}</li>
     </ul>
 
 
