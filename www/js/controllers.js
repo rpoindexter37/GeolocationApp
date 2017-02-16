@@ -84,76 +84,75 @@ angular.module('starter.controllers', ['ngCordova'])
     })
   }
 
+  function getLocationAndSend() {
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+    $cordovaGeolocation
+      .getCurrentPosition(posOptions)
+      .then(function (position) {
+        $scope.lat  = position.coords.latitude
+        $scope.long = position.coords.longitude
+
+        console.log("start trip call!")
+        var coordinates = {lat: $scope.lat, long: $scope.long}
+        $http({
+            method : "PATCH",
+            url : ("http://localhost:3000/child/" + $stateParams.childId + "/" + $stateParams.tripId),
+            data: coordinates
+        }).then(function mySuccess(response) {
+            console.log("success")
+            console.log(response)
+        }, function myError(response) {
+            console.log("error");
+          })
+        }, function(err) {
+      });
+  }
 
   $scope.startTrip = function(){
+    $scope.tripStarted = true
+    // get location and send patch here...
+    getLocationAndSend()
+    $scope.tripWatcher = setInterval(getLocationAndSend, 5000)
+  }
 
-    var posOptions = {timeout: 10000, enableHighAccuracy: false};
-      $cordovaGeolocation
-        .getCurrentPosition(posOptions)
-        .then(function (position) {
-          $scope.lat  = position.coords.latitude
-          $scope.long = position.coords.longitude
-
-          console.log("start trip call!")
-          console.log($stateParams.id)
-          var coordinates = {lat: $scope.lat, long: $scope.long}
-          $http({
-              method : "PATCH",
-              url : ("http://localhost:3000/child/" + $stateParams.childId + "/" + $stateParams.tripId),
-              data: coordinates
-          }).then(function mySuccess(response) {
-              console.log("success")
-              console.log(response)
-          }, function myError(response) {
-              console.log("error");
-          })
-
-        }, function(err) {
-        });
-
-      var watchOptions = {
-        timeout : 3000,
-        enableHighAccuracy: false // may cause errors if true
-      };
-
-      var watch = $cordovaGeolocation.watchPosition(watchOptions)
-      watch.then(
-        null,
-        function(err) {
-        },
-        function(position) {
-          $scope.lat  = position.coords.latitude
-          $scope.long = position.coords.longitude
-          // $scope.$apply()
-          console.log("adding to the current trip");
-          var coordinates = {lat: $scope.lat, long: $scope.long}
-          $http({
-              method : "PATCH",
-              url : ("http://localhost:3000/child/" + $stateParams.childId + "/" + $stateParams.tripId),
-              data: coordinates
-          }).then(function mySuccess(response) {
-              console.log("success")
-              console.log(response)
-          }), function myError(response) {
-              console.log("error");
-          }
-
-        }, function(err) {
-        })
-      }
-
-
-
-  //   $http({
-  //       method : "POST",
-  //       url : "http://localhost:3000/trips",
-  //       data: { topMPH: 69 }
-  //   }).then(function mySuccess(response) {
-  //       console.log("success")
-  //   }, function myError(response) {
-  //       console.log("error");
-  //   })
-  // }
+  $scope.stopTrip = function() {
+    $scope.tripStarted = false
+    console.log("Stopping the trip...");
+    clearInterval($scope.tripWatcher)
+  }
+      // var watchOptions = {
+      //   timeout : 3000,
+      //   enableHighAccuracy: false // may cause errors if true
+      // };
+      //
+      // console.log("Setting up watcher...")
+      // var watch = $cordovaGeolocation.watchPosition(watchOptions)
+      // console.log("Watching 👀")
+      // watch.then(
+      //   null,
+      //   function(err) {
+      //     console.log("Eep, there was a problem :(")
+      //   },
+      //   function(position) {
+      //     console.log("Great success!")
+      //     $scope.lat  = position.coords.latitude
+      //     $scope.long = position.coords.longitude
+      //     // $scope.$apply()
+      //     console.log("adding to the current trip")
+      //     var coordinates = {lat: $scope.lat, long: $scope.long}
+      //     $http({
+      //         method : "PATCH",
+      //         url : ("http://localhost:3000/child/" + $stateParams.childId + "/" + $stateParams.tripId),
+      //         data: coordinates
+      //     }).then(function mySuccess(response) {
+      //         console.log("success")
+      //         console.log(response)
+      //     }), function myError(response) {
+      //         console.log("error");
+      //     }
+      //
+      //   })
+      // }
 
 })
 
