@@ -74,4 +74,17 @@ const
 
 
 // userSchema.plugin(passportLocalMongoose)
-module.exports = mongoose.model('Child', childSchema)
+
+// 58a50ffcbf06e430fd124638
+var Child = mongoose.model('Child', childSchema)
+
+// Child.findById('58a50ffcbf06e430fd124638', (err, child) => {
+//   if(err) return console.log(err)
+//   var trip = child.trips.id('58a50ffcbf06e430fd124639')
+//   trip.tripStatus.push({lat: 666, long: 69})
+//   child.save((err, updatedChild) => {
+//     console.log(updatedChild)
+//   })
+// })
+
+module.exports = Child

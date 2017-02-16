@@ -106,6 +106,7 @@ app.all('*', function(req, res, next) {
     })
   })
 
+
   app.get('/parents', (req, res) => {
     Parent.find({}, function(err, parents) {
       res.json(parents)
@@ -146,6 +147,46 @@ app.all('*', function(req, res, next) {
       })
     })
     })
+
+    app.patch('/child/:childId', function(req, res){
+      var cId = req.params.childId
+      Child.findById(cId, (err, child) => {
+        child.trips.push({})
+        child.save()
+        res.json(child.trips)
+    })
+  })
+
+    app.patch('/child/:childId/:tripId', function(req, res){
+      console.log(req.body);
+      var cId = req.params.childId
+      var tId =req.params.tripId
+      Child.findById(cId, (err, child) => {
+          if(err) return console.log(err)
+          var trip = child.trips.id(tId)
+          trip.tripStatus.push(req.body)
+          child.save((err, updatedChild) => {
+            console.log(updatedChild)
+            res.json(updatedChild)
+          })
+        })
+      })
+
+      // Child.findById('58a50ffcbf06e430fd124638', (err, child) => {
+      //   if(err) return console.log(err)
+      //   var trip = child.trips.id('58a50ffcbf06e430fd124639')
+      //   trip.tripStatus.push({lat: 666, long: 69})
+      //   child.save((err, updatedChild) => {
+      //     console.log(updatedChild)
+      //   })
+      // })
+
+
+      app.patch('/parent', function(req, res) {
+        req.body.tripStatus
+        res.json({message: "request received."})
+      })
+
 
 
     app.post('/login', (req, res, next) => {

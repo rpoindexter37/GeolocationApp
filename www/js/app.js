@@ -81,15 +81,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
     //   }
     // })
 
-  // .state('app.single', {
-  //   url: '/playlists/:playlistId',
-  //   views: {
-  //     'menuContent': {
-  //       templateUrl: 'templates/playlist.html',
-  //       controller: 'PlaylistCtrl'
-  //     }
-  //   }
-  // });
+  .state('app.start', {
+    url: '/start/:childId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/start.html',
+        controller: 'NewTripCtrl'
+      }
+    }
+  })
+
+  .state('app.newtrip', {
+    url: '/start/:childId/:tripId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/newtrip.html',
+        controller: 'NewTripCtrl'
+      }
+    }
+  });
+
+
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/login');
 });
