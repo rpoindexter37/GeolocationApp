@@ -1,19 +1,20 @@
 <ion-view view-title="Create An Account">
-  <ion-content>
+  <ion-content class='content'>
     <div class="loginPadding">
-      <h1>Create a Parent account</h1>
+      <h1 class="PageTitles">Create a Parent account</h1>
       <form ng-submit="createParent()">
-        <label for=""><h3>Name</h3>
+        <label class="PageTitles">Name
           <input type="text" placeholder="name" name="name" ng-model="newParent.name">
         </label>
-        <label for="">Email
+        <label class="PageTitles">Email
           <input type="text" placeholder="email" name="email" ng-model="newParent.email">
         </label>
-        <label for="">Password
+        <label class="PageTitles">Password
           <input type="text" placeholder="password" name="password" ng-model="newParent.password">
         </label>
-        <button type="submit">Submit</button>
-
+        <div class="padSubmitButton">
+          <button class="submitButton button button-calm" type="submit">Submit</button>
+        </div>
 
       </form>
 

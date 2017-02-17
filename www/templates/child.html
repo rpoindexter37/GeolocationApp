@@ -1,11 +1,14 @@
 <ion-view view-title="Child">
-  <ion-content>
-    <h1>{{ currentChild.name }}</h1>
 
-    <h2>Average top speed is {{ currentChild.averageTopSpeed }}</h2>
-
-    <p ng-repeat="t in currentChild.trips">  {{ t }}</p>
-
+  <ion-content class="content">
+    <div class="summary">
+      <h1 class="PageTitles">name: {{ currentChild.name }}</h1>
+      <h2 class='PageTitles'>Average driving grade: {{ currentChild.averageTopSpeed }}</h2>
+      <h2 class='PageTitles'>Average top speed:     {{ currentChild.averageTopSpeed }}</h2>
+       <p ng-repeat="t in currentChild.trips">  {{ t }}</p>
+    </div>
+  
+    
 
 
   </ion-content>

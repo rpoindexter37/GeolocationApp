@@ -1,21 +1,23 @@
 <ion-view view-title="Parent">
-  <ion-content>
-    <h1>{{ currentParent.name }}</h1>
+  <ion-content class="content">
+    <div class="summary">
+      <h1 class="PageTitles">Name: {{ currentParent.name }}</h1>
+      <ul class="PageTitles" style="font-size:24px;">Listed Children:
+        <li ui-sref="app.child({id: c._id})" ng-repeat="c in currentParent.children">{{ c.name }} and thier id {{ c._id }} and here is their link {{ }}</li>
+      </ul>
+    </div>
 
-    <ul>here are his children
-      <li ui-sref="app.child({id: c._id})" ng-repeat="c in currentParent.children">{{ c.name }} and thier id {{ c._id }} and here is their link {{ }}</li>
-    </ul>
+  <div class="submit addAChild PageTitles" ng-controller="ChildCtrl">
+      <form ng-submit="createChild()">
+        <label for="input" style="font-size:24px;"> Add a new child</label>
+        <input type="text" name="name" placeholder="name" ng-model="newChild.name">
+        <div class="padSubmitButton">
+          <button class="submitButton button button-calm"type="submit">Submit</button>
+        </div>
 
-
-<div class="submit" ng-controller="ChildCtrl">
-    <form ng-submit="createChild()">
-      <label for="input"> Add a child</label>
-      <input type="text" name="name" placeholder="name" ng-model="newChild.name">
-      <input type="submit" value="Submit" />
-
-      <!-- <button ng-click="createChild()" class="button button-dark" name="button">Submit</button> -->
-    </form>
-</div>
+        <!-- <button ng-click="createChild()" class="button button-dark" name="button">Submit</button> -->
+      </form>
+  </div>
 
   </ion-content>
 </ion-view>

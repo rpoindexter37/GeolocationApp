@@ -4,6 +4,66 @@
   bottom: 0px;
   margin: 20px;
 }
+
 .loginPadding{
-  margin: 2%;
+  background: rgba(192,192,192,0.4);
+  margin: auto;
+  margin-top: 5%;
+  width: 50%;
+  max-width: 400px;
+  border: 5px solid white;
+  border-radius: 10px;
+  padding: 30px;
+  padding-bottom: 45%;
+  margin-bottom: 40%;
+  max-height: 400px;
+}
+
+.PageTitles{
+  color: white;
+  font-family: 'Lobster', cursive;
+}
+
+.content {
+  color: white;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  background: url('/img/trafficpic.jpg') no-repeat;
+  background-size: cover;
+}
+
+.padSubmitButton{
+  padding-top: 10px;
+}
+
+.submitButton{
+  width: 162px;
+  height: 30px
+}
+.summary{
+  background: rgba(192,192,192,0.4);
+  margin: auto;
+  margin-top: 10px;
+  border: 5px solid white;
+  border-radius: 10px;
+  padding: 30px;
+  padding-bottom: 10%;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.addAChild{
+  background: rgba(192,192,192,0.4);
+  margin: auto;
+  margin-top: 10px;
+  border: 5px solid white;
+  border-radius: 10px;
+  padding: 30px;
+  padding-bottom: 10%;
+  max-width: 90%;
+  max-height: 90%;
 }
