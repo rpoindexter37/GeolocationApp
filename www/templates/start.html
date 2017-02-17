@@ -1,11 +1,15 @@
 <ion-view view-title="Create a New Trip">
-  <ion-content>
-    <div ng-controller="NewTripCtrl">
-      <div>
-    <button ng-click="createTrip()" type="button" class="button button-calm">
-      Create a new Trip
-    </button>
-  </div>
-  </div>
+
+    <ion-content class="content">
+      <div class="summary">
+        <h1 class="PageTitles">name: {{ currentChild.name }}</h1>
+          <div ng-controller="NewTripCtrl">
+            <div>
+                <button ng-click="createTrip()" type="button" class="padSubmitButton button button-calm">
+                  Create a new trip
+                </button>
+            </div>
+          </div>
+      </div>
   </ion-content>
 </ion-view>
