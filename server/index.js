@@ -148,6 +148,8 @@ app.all('*', function(req, res, next) {
     })
     })
 
+
+
     app.patch('/child/:childId', function(req, res){
       var cId = req.params.childId
       Child.findById(cId, (err, child) => {
@@ -156,6 +158,15 @@ app.all('*', function(req, res, next) {
         res.json(child.trips)
     })
   })
+
+  app.delete('/child/:childId', function(req, res){
+    var cId = req.params.childId
+    console.log(cId)
+    Child.findByIdAndRemove(cId, function(err) {
+      if (err) return console.log(err)
+      console.log("child was removed")
+  })
+})
 
     app.patch('/child/:childId/:tripId', function(req, res){
       console.log(req.body);

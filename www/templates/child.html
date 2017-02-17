@@ -6,9 +6,10 @@
       <h2 class='PageTitles'>Average driving grade: {{ currentChild.averageTopSpeed }}</h2>
       <h2 class='PageTitles'>Average top speed:     {{ currentChild.averageTopSpeed }}</h2>
        <p ng-repeat="t in currentChild.trips">  {{ t }}</p>
+       <button ng-click="deleteChild()" type="button" class="button button-assertive">Delete Child</button>
     </div>
-  
-    
+
+
 
 
   </ion-content>
