@@ -3,7 +3,8 @@
     <div class="summary">
       <h1 class="PageTitles">Name: {{ currentParent.name }}</h1>
       <ul class="PageTitles" style="font-size:24px;">Listed Children:
-        <li ui-sref="app.child({id: c._id})" ng-repeat="c in currentParent.children">{{ c.name }} and thier id {{ c._id }} and here is their link {{ }}</li>
+        <li ui-sref="app.child({id: c._id})" ng-repeat="c in currentParent.children">{{ c.name }} and  thier id {{ c._id }} and here is their link {{ }}
+        </li>
       </ul>
     </div>
 

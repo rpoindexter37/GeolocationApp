@@ -158,7 +158,7 @@ angular.module('starter.controllers', ['ngCordova'])
 })
 
 
-.controller('ChildCtrl', function($scope, $cordovaGeolocation, $stateParams, $http) {
+.controller('ChildCtrl', function($scope, $cordovaGeolocation, $stateParams, $http, $state) {
 
   $http.get("http://localhost:3000/child/" + $stateParams.id)
     .then(function(response) {
@@ -182,6 +182,20 @@ angular.module('starter.controllers', ['ngCordova'])
     })
   }
 
+  $scope.deleteChild = function () {
+    console.log("deleting kid")
+    console.log($stateParams.id);
+    $http({
+        method: "DELETE",
+        url: ("http://localhost:3000/child/" + $stateParams.id),
+        //we are going to return child.parent = parent.id
+    }).then(function mySuccess(response) {
+    }, function myError(response) {
+        console.log("error");
+    })
+      $state.go('app.login')
+  }
+
 })
 
 .controller('ParentCtrl', function($scope, $http, $stateParams) {
@@ -192,6 +206,7 @@ console.log($stateParams);
       console.log(response.data);
         $scope.currentParent = response.data
     })
+
 
     // $http.get("http://localhost:3000/child/" + $stateParams.id)
     //   .then(function(response) {
