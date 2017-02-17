@@ -1,14 +1,14 @@
 <ion-view view-title="Login Page">
-  <ion-content>
+  <ion-content class="content">
     <div class="loginPadding">
-      <h1>Login</h1>
-      <form>
+      <h1 class="PageTitles" style="text-align:center;">Login</h1>
+      <form class="PageTitles">
           <label>Username</label>
           <input type="text" placeholder="username" name="username" ng-model="loginForm.username" required>
           <label>Password</label>
             <input type="password" placeholder="password" name="password" ng-model="loginForm.password" required>
-          <div>
-            <button type="submit">Login</button>
+          <div class="padSubmitButton">
+            <button class="submitButton button button-calm"type="submit">Login</button>
           </div>
       </form>
     </div>
