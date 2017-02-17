@@ -119,6 +119,7 @@ angular.module('starter.controllers', ['ngCordova'])
     $scope.tripStarted = false
     console.log("Stopping the trip...");
     clearInterval($scope.tripWatcher)
+    $state.go('app.start')
   }
       // var watchOptions = {
       //   timeout : 3000,
