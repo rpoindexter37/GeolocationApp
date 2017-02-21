@@ -1,5 +1,6 @@
 const
   mongoose = require('mongoose'),
+  // passportLocalMongoose = require('passport-local-mongoose'),
   bcrypt = require('bcrypt-nodejs'),
   Schema = mongoose.Schema,
   tripStatusSchema = new Schema({
@@ -75,7 +76,7 @@ const
 
 // userSchema.plugin(passportLocalMongoose)
 
-// 58a50ffcbf06e430fd124638
+
 var Child = mongoose.model('Child', childSchema)
 
 // Child.findById('58a50ffcbf06e430fd124638', (err, child) => {

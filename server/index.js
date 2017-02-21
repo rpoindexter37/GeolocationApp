@@ -9,8 +9,8 @@ const
   MongoDBStore = require('connect-mongodb-session')(session),
   passport = require('passport'),
   bodyParser = require('body-parser'),
-  Parent = require('./models/Parent.js')
-  Child = require('./models/Child.js')
+  Parent = require('./models/Parent.js'),
+  Child = require('./models/Child.js'),
   port = process.env.PORT || 3000,
   mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
 
@@ -32,6 +32,17 @@ const store = new MongoDBStore({
   app.use(bodyParser.json())
   app.use(express.static(process.env.PWD + '/www'))
   app.use(flash())
+  // app.use(session({
+  // secret: 'boooooooooom',
+  // cookie: {maxAge: 60000000},
+  // resave: true,
+  // saveUninitialized: false,
+  // store: store
+  // }))
+  // app.use(passport.initialize())
+  // app.use(passport.session())
+
+
 
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
@@ -40,47 +51,6 @@ app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
-
-
-
-//model
-  // var Trip = mongoose.model('Trip', {
-  //   start: Date,
-  //   locationInfo: {},
-  //   end: Date,
-  //   topMPH: Number,
-  // })
-  //
-  // var parentSchema = new mongoose.Schema({
-  //   name: {type: String},
-  //   password: {type: String},
-  //   children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Child'}]
-  // })
-  //
-  // parentSchema.pre('findOne', function(next) {
-  //   this.populate('children')
-  //   next()
-  // })
-  //
-  // var Parent = mongoose.model('Parent', parentSchema)
-  //
-  // var childSchema = new mongoose.Schema({
-  //   name: {type: String},
-  //   username: {type: String},
-  //   password: {type: String},
-  //   averageRating: {type: Number},
-  //   averageTopSpeed: {type: Number},
-  //   totalTripTime: {type: Number},
-  //   parentView: {type: Boolean, default: false},
-  //   parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent'}
-  // })
-  //
-  // childSchema.pre('findOne', function(next) {
-  //   this.populate('parent')
-  //   next()
-  // })
-  //
-  // var Child = mongoose.model('Child', childSchema)
 
 
 //this sends the html file to the server
@@ -182,6 +152,19 @@ app.all('*', function(req, res, next) {
           })
         })
       })
+
+      app.delete('/child/:childId/:tripId', function(req, res){
+        var cId = req.params.childId
+        var tId = req.params.tripId
+        console.log(cId)
+        Child.findById(cId, function(err, child) {
+          if (err) return console.log(err)
+          var trips = child.trips
+          var tripIndex = trips.indexOf(tId)
+          trips.splice(tripIndex, 1)
+          console.log("trip was removed")
+      })
+    })
 
       // Child.findById('58a50ffcbf06e430fd124638', (err, child) => {
       //   if(err) return console.log(err)
