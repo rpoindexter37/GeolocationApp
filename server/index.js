@@ -6,8 +6,9 @@ const
   flash = require('connect-flash'),
   cookieParser = require('cookie-parser'),
   session = require('express-session'),
-  MongoDBStore = require('connect-mongodb-session')(session),
+  // MongoDBStore = require('connect-mongodb-session')(session),
   passport = require('passport'),
+  dotenv = require('dotenv').load({silent: true}),
   bodyParser = require('body-parser'),
   Parent = require('./models/Parent.js'),
   Child = require('./models/Child.js'),
@@ -15,15 +16,15 @@ const
   mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
 
 //mongoose connection
-  mongoose.connect(mongoConnectionString, (err) => {
+mongoose.connect(mongoConnectionString, (err) => {
   console.log(err || "Connected to MongoDB.")
 })
 
 
-const store = new MongoDBStore({
-  uri: mongoConnectionString,
-  collection: 'sessions'
-})
+// const store = new MongoDBStore({
+//   uri: mongoConnectionString,
+//   collection: 'sessions'
+// })
 
 //middleware
   app.use(morgan('dev'))
