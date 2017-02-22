@@ -6,24 +6,22 @@ var
   flash = require('connect-flash'),
   cookieParser = require('cookie-parser'),
   session = require('express-session'),
-  MongoDBStore = require('connect-mongodb-session')(session),
+  // MongoDBStore = require('connect-mongodb-session')(session),
   passport = require('passport'),
+  dotenv = require('dotenv').load({silent: true}),
   bodyParser = require('body-parser'),
   Parent = require('./models/Parent.js'),
   Child = require('./models/Child.js'),
-  port = process.env.PORT || 3000,
+  PORT = process.env.PORT || 3000,
   jwt = require('jsonwebtoken'),
   apiRouter = express.Router(),
   superSecret = 'thisisasecretforjwt'
   mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
 
-
-
 // const store = new MongoDBStore({
 //   uri: mongoConnectionString,
 //   collection: 'sessions'
 // })
-
 
 
 //middleware
@@ -260,6 +258,6 @@ app.all('*', function(req, res, next) {
       });
     });
 
-app.listen(port, (err) => {
-  console.log(err || "server running on port " + port)
+app.listen(PORT, (err) => {
+  console.log(err || "server running on port " + PORT)
 })
