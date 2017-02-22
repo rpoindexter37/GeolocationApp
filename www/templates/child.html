@@ -6,8 +6,11 @@
       <h1 class="PageTitles">name: {{ currentChild.name }}</h1>
       <h2 class='PageTitles'>Average driving grade: B- {{ currentChild.averageTopSpeed }}</h2>
       <h2 class='PageTitles'>Average top speed: 47 MPH   {{ currentChild.averageTopSpeed }}</h2>
-       <p ng-repeat="t in currentChild.trips">  {{ t }}</p>
-       <button ng-click="deleteChild()" type="button" class="button button-assertive">Delete Child</button>
+      <div ng-repeat="t in currentChild.trips">
+       <h3 style="color: black; font-weight: bold;">  {{ t }}</h3>
+       <button type="button" ng-click="deleteTrip(t._id)" class="padSubmitButton button button-assertive">Delete Trip</button>
+     </div>
+       <button ng-click="deleteChild()" type="button" class="padSubmitButton button button-assertive">Delete Child</button>
     </div>
   </ion-content>
 </ion-view>

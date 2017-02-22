@@ -196,6 +196,20 @@ angular.module('starter.controllers', ['ngCordova'])
       $state.go('app.login')
   }
 
+
+  $scope.deleteTrip = function (tripId) {
+    console.log("deleting trip")
+    console.log($stateParams.id);
+    $http({
+        method: "DELETE",
+        url: ("http://localhost:3000/child/" + $stateParams.id + "/" + tripId),
+        //we are going to return child.parent = parent.id
+    }).then(function mySuccess(response) {
+    }, function myError(response) {
+        console.log("error");
+    })
+  }
+
 })
 
 .controller('ParentCtrl', function($scope, $http, $stateParams) {

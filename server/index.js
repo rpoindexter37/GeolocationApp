@@ -1,4 +1,4 @@
-const
+var
   express = require('express'),
   app = express(),
   mongoose = require('mongoose'),
@@ -13,26 +13,36 @@ const
   Parent = require('./models/Parent.js'),
   Child = require('./models/Child.js'),
   PORT = process.env.PORT || 3000,
+  jwt = require('jsonwebtoken'),
+  apiRouter = express.Router(),
+  superSecret = 'thisisasecretforjwt'
   mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
-
-//mongoose connection
-mongoose.connect(mongoConnectionString, (err) => {
-  console.log(err || "Connected to MongoDB.")
-})
-
 
 // const store = new MongoDBStore({
 //   uri: mongoConnectionString,
 //   collection: 'sessions'
 // })
 
+
 //middleware
   app.use(morgan('dev'))
-  app.use(cookieParser())
-  app.use(bodyParser.urlencoded({extended: true}))
   app.use(bodyParser.json())
+  // app.use(cookieParser())
+  app.use(bodyParser.urlencoded({extended: true}))
   app.use(express.static(process.env.PWD + '/www'))
   app.use(flash())
+  // app.use(session({
+  // secret: 'boooooooooom',
+  // cookie: {maxAge: 60000000},
+  // resave: true,
+  // saveUninitialized: false,
+  // store: store
+  // }))
+  // app.use(passport.initialize())
+  // app.use(passport.session())
+
+
+
 
 
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
@@ -42,46 +52,11 @@ app.all('*', function(req, res, next) {
     next();
 });
 
+//mongoose connection
+  mongoose.connect(mongoConnectionString, (err) => {
+  console.log(err || "Connected to MongoDB.")
+})
 
-
-//model
-  // var Trip = mongoose.model('Trip', {
-  //   start: Date,
-  //   locationInfo: {},
-  //   end: Date,
-  //   topMPH: Number,
-  // })
-  //
-  // var parentSchema = new mongoose.Schema({
-  //   name: {type: String},
-  //   password: {type: String},
-  //   children: [{type: mongoose.Schema.Types.ObjectId, ref: 'Child'}]
-  // })
-  //
-  // parentSchema.pre('findOne', function(next) {
-  //   this.populate('children')
-  //   next()
-  // })
-  //
-  // var Parent = mongoose.model('Parent', parentSchema)
-  //
-  // var childSchema = new mongoose.Schema({
-  //   name: {type: String},
-  //   username: {type: String},
-  //   password: {type: String},
-  //   averageRating: {type: Number},
-  //   averageTopSpeed: {type: Number},
-  //   totalTripTime: {type: Number},
-  //   parentView: {type: Boolean, default: false},
-  //   parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Parent'}
-  // })
-  //
-  // childSchema.pre('findOne', function(next) {
-  //   this.populate('parent')
-  //   next()
-  // })
-  //
-  // var Child = mongoose.model('Child', childSchema)
 
 
 //this sends the html file to the server
@@ -119,6 +94,13 @@ app.all('*', function(req, res, next) {
       console.log('im trying to get one parent')
       res.sendFile(process.env.PWD + '/www/templates/user/parent.html')
         res.json(parent)
+    })
+  })
+
+  app.patch('/parent/:id', (req, res) => {
+    Parent.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, parent) {
+      if (err) throw err
+      res.json(parent)
     })
   })
 
@@ -184,6 +166,19 @@ app.all('*', function(req, res, next) {
         })
       })
 
+      app.delete('/child/:childId/:tripId', function(req, res){
+        var cId = req.params.childId
+        var tId = req.params.tripId
+        console.log(cId)
+        Child.findById(cId, function(err, child) {
+          if (err) return console.log(err)
+          var trips = child.trips
+          var tripIndex = trips.indexOf(tId)
+          trips.splice(tripIndex, 1)
+          console.log("trip was removed")
+      })
+    })
+
       // Child.findById('58a50ffcbf06e430fd124638', (err, child) => {
       //   if(err) return console.log(err)
       //   var trip = child.trips.id('58a50ffcbf06e430fd124639')
@@ -215,6 +210,53 @@ app.all('*', function(req, res, next) {
       })(req, res, next)
     })
 
+
+    apiRouter.post('/authenticate', function(req, res) {
+      // find the user
+      Parent.findOne({
+        username: req.body.username})
+        .select('name username password')
+        .exec(function(err, parent) {
+        if (err) throw err;
+        // no user with that username was found
+        if (!parent) {
+          res.json({
+            success: false,
+            message: 'Authentication failed. User not found.'
+          });
+        }
+        else if (parent) {
+
+          // check if password matches
+          var validPassword = parent.comparePassword(req.body.password);
+          if (!validPassword) {
+            res.json({
+              success: false,
+              message: 'Authentication failed. Wrong password.'
+            });
+          }
+          else {
+
+            // if user is found and password is right
+            // create a token
+            var token = jwt.sign({
+            	name: parent.name,
+            	username: parent.username
+            },
+            superSecret, {
+            expiresIn: '24h' // expires in 24 hours
+            });
+
+            // return the information including token as JSON
+            res.json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token
+            });
+          }
+        }
+      });
+    });
 
 app.listen(PORT, (err) => {
   console.log(err || "server running on port " + PORT)
