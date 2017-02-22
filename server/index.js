@@ -1,4 +1,4 @@
-const
+var
   express = require('express'),
   app = express(),
   mongoose = require('mongoose'),
@@ -12,24 +12,25 @@ const
   Parent = require('./models/Parent.js'),
   Child = require('./models/Child.js'),
   port = process.env.PORT || 3000,
+  jwt = require('jsonwebtoken'),
+  apiRouter = express.Router(),
+  superSecret = 'thisisasecretforjwt'
   mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
 
-//mongoose connection
-  mongoose.connect(mongoConnectionString, (err) => {
-  console.log(err || "Connected to MongoDB.")
-})
 
 
-const store = new MongoDBStore({
-  uri: mongoConnectionString,
-  collection: 'sessions'
-})
+// const store = new MongoDBStore({
+//   uri: mongoConnectionString,
+//   collection: 'sessions'
+// })
+
+
 
 //middleware
   app.use(morgan('dev'))
-  app.use(cookieParser())
-  app.use(bodyParser.urlencoded({extended: true}))
   app.use(bodyParser.json())
+  // app.use(cookieParser())
+  app.use(bodyParser.urlencoded({extended: true}))
   app.use(express.static(process.env.PWD + '/www'))
   app.use(flash())
   // app.use(session({
@@ -45,12 +46,19 @@ const store = new MongoDBStore({
 
 
 
+
 // CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
+
+//mongoose connection
+  mongoose.connect(mongoConnectionString, (err) => {
+  console.log(err || "Connected to MongoDB.")
+})
+
 
 
 //this sends the html file to the server
@@ -88,6 +96,13 @@ app.all('*', function(req, res, next) {
       console.log('im trying to get one parent')
       res.sendFile(process.env.PWD + '/www/templates/user/parent.html')
         res.json(parent)
+    })
+  })
+
+  app.patch('/parent/:id', (req, res) => {
+    Parent.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, parent) {
+      if (err) throw err
+      res.json(parent)
     })
   })
 
@@ -197,6 +212,53 @@ app.all('*', function(req, res, next) {
       })(req, res, next)
     })
 
+
+    apiRouter.post('/authenticate', function(req, res) {
+      // find the user
+      Parent.findOne({
+        username: req.body.username})
+        .select('name username password')
+        .exec(function(err, parent) {
+        if (err) throw err;
+        // no user with that username was found
+        if (!parent) {
+          res.json({
+            success: false,
+            message: 'Authentication failed. User not found.'
+          });
+        }
+        else if (parent) {
+
+          // check if password matches
+          var validPassword = parent.comparePassword(req.body.password);
+          if (!validPassword) {
+            res.json({
+              success: false,
+              message: 'Authentication failed. Wrong password.'
+            });
+          }
+          else {
+
+            // if user is found and password is right
+            // create a token
+            var token = jwt.sign({
+            	name: parent.name,
+            	username: parent.username
+            },
+            superSecret, {
+            expiresIn: '24h' // expires in 24 hours
+            });
+
+            // return the information including token as JSON
+            res.json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token
+            });
+          }
+        }
+      });
+    });
 
 app.listen(port, (err) => {
   console.log(err || "server running on port " + port)
