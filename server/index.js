@@ -9,8 +9,8 @@ const
   MongoDBStore = require('connect-mongodb-session')(session),
   passport = require('passport'),
   bodyParser = require('body-parser'),
-  Parent = require('./models/Parent.js')
-  Child = require('./models/Child.js')
+  Parent = require('./models/Parent.js'),
+  Child = require('./models/Child.js'),
   PORT = process.env.PORT || 3000,
   mongoConnectionString = process.env.MONGODB_URL || 'mongodb://localhost/locations-app'
 
